@@ -9,6 +9,9 @@ services:
     env_file:
       - .env
     environment:
+      DATABASE_PATH: /data/opendots.sqlite
+      HOST: 0.0.0.0
+      PORT: 4310
       OWNER_TOKEN: ${OWNER_TOKEN:?Set a 24+ character OWNER_TOKEN in .env}
       APP_ORIGIN: ${APP_ORIGIN:-http://localhost:4310}
       OWNER_ID: ${OWNER_ID:-opendots-owner}
