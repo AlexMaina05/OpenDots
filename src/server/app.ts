@@ -10,12 +10,19 @@ import type { Platform } from './platform.js';
 import { VoiceService } from './voice.js';
 import { workspaceRoutes } from './workspace-routes.js';
 const interval = z.number().int().min(60).max(31_536_000).nullable();
+function parseOrigins(origin?: string | string[]): string[] {
+  if (!origin) return [];
+  const list = Array.isArray(origin) ? origin : origin.split(',');
+  return list
+    .map((item) => item.trim().replace(/\/+$/, ''))
+    .filter(Boolean);
+}
 export interface AppOptions {
   store: Store;
   runner: Runner;
   config: Config;
   ownerToken?: string;
-  origin?: string;
+  origin?: string | string[];
   platform?: Platform;
 }
 export function createApp({
@@ -38,17 +45,31 @@ export function createApp({
     c.header('Cache-Control', 'no-store');
     c.header('X-Content-Type-Options', 'nosniff');
     const requestUrl = new URL(c.req.url);
+    const configuredOrigins = parseOrigins(origin);
+    const originHostnames = configuredOrigins
+      .map((item) => {
+        try {
+          return new URL(item).hostname;
+        } catch {
+          return null;
+        }
+      })
+      .filter((h): h is string => Boolean(h));
     const allowedHosts = new Set([
       'localhost',
       '127.0.0.1',
       '[::1]',
-      ...(origin ? [new URL(origin).hostname] : []),
+      ...originHostnames,
     ]);
     if (!ownerToken && !allowedHosts.has(requestUrl.hostname))
       return c.json({ error: 'Unrecognized host.' }, 403);
     const requestOrigin = c.req.header('origin');
-    const expectedOrigin = origin ?? new URL(c.req.url).origin;
-    if (requestOrigin && requestOrigin !== expectedOrigin)
+    const allowedOrigins = new Set(
+      configuredOrigins.length > 0
+        ? configuredOrigins
+        : [new URL(c.req.url).origin],
+    );
+    if (requestOrigin && !allowedOrigins.has(requestOrigin))
       return c.json({ error: 'Cross-origin requests are not allowed.' }, 403);
     if (c.req.header('sec-fetch-site') === 'cross-site')
       return c.json({ error: 'Cross-site requests are not allowed.' }, 403);
