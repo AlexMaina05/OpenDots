@@ -239,7 +239,7 @@ export function App() {
             {error}
           </p>
         )}
-        <p className="muted">The token stays in this tab’s session storage.</p>
+        <p className="muted">The token is remembered in this browser.</p>
       </main>
     );
   if (!state || !workspace || !dot)
