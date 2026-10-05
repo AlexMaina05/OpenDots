@@ -185,7 +185,7 @@ export function createApp({
   app.delete('/api/tasks/:id', (c) => {
     const id = c.req.param('id');
     runner.abort(id);
-    workspace.deleteTask(id);
+    platform?.workspace.deleteTask(id);
     const deleted = store.deleteTask(id);
     if (!deleted) return c.json({ error: 'Task not found.' }, 404);
     return c.json({ ok: true });
