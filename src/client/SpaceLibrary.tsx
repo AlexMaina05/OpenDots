@@ -6,6 +6,7 @@ import {
   LayoutGrid,
   List,
   ArrowUpRight,
+  Trash2,
 } from 'lucide-react';
 import type { Page } from '../server/pages';
 import type { Space } from '../shared/types';
@@ -27,11 +28,13 @@ export function SpaceLibrary({
   pages,
   onPage,
   onNew,
+  onDelete,
 }: {
   space: Space;
   pages: Page[];
   onPage: (id: string) => void;
   onNew: () => void;
+  onDelete?: (id: string) => void;
 }) {
   const [query, setQuery] = useState('');
   const [layout, setLayout] = useState<'grid' | 'list'>('grid');
@@ -117,10 +120,18 @@ export function SpaceLibrary({
       {filtered.length ? (
         <div className={`library-pages ${layout}`}>
           {filtered.map((page) => (
-            <button
+            <div
+              role="button"
+              tabIndex={0}
               className="library-page-card"
               key={page.id}
               onClick={() => onPage(page.id)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  onPage(page.id);
+                }
+              }}
             >
               <span className="library-page-icon">
                 <FileText size={20} strokeWidth={1.5} />
@@ -149,8 +160,22 @@ export function SpaceLibrary({
                   )}
                 </div>
               </div>
+              {onDelete && (
+                <button
+                  type="button"
+                  className="library-page-delete"
+                  title="Delete page"
+                  aria-label={`Delete ${page.title}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onDelete(page.id);
+                  }}
+                >
+                  <Trash2 size={15} />
+                </button>
+              )}
               <ArrowUpRight className="library-card-arrow" size={15} />
-            </button>
+            </div>
           ))}
         </div>
       ) : (

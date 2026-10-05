@@ -3841,10 +3841,14 @@ h3 {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.thread-summary small {
+.thread-summary small,
+.thread-summary .thread-dot-name {
   font-size: 11px;
   color: var(--muted);
   font-weight: 400;
+  background: transparent !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
 }
 .space-access-fields {
   border: 1px solid #e5e5e5;
@@ -4523,8 +4527,11 @@ body.dark .unlock input,
 }
 
 .dark-theme .thread-summary small,
-[data-theme='dark'] .thread-summary small {
+.dark-theme .thread-summary .thread-dot-name,
+[data-theme='dark'] .thread-summary small,
+[data-theme='dark'] .thread-summary .thread-dot-name {
   color: #64748b;
+  background: transparent !important;
 }
 
 .dark-theme .delete-thread-btn,
@@ -4964,4 +4971,229 @@ body.dark .eyebrow {
   background: #1e293b;
   border-color: #334155;
 }
+
+/* Task Row & Delete Button */
+.task-row {
+  cursor: pointer;
+}
+
+.task-row-delete {
+  padding: 6px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: transparent;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.task-row-delete:hover {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* Tasks & Activity Dark Theme */
+.dark-theme .search-box,
+[data-theme='dark'] .search-box {
+  background: #0f172a;
+  border-color: #1e293b;
+  color: #94a3b8;
+}
+
+.dark-theme .search-box input,
+[data-theme='dark'] .search-box input {
+  background: transparent;
+  color: #f8fafc;
+}
+
+.dark-theme .search-box input::placeholder,
+[data-theme='dark'] .search-box input::placeholder {
+  color: #64748b;
+}
+
+.dark-theme .search-box:focus-within,
+[data-theme='dark'] .search-box:focus-within {
+  border-color: #6366f1;
+}
+
+.dark-theme .task-row,
+[data-theme='dark'] .task-row {
+  background: #0f172a;
+  border-color: #1e293b;
+  color: #f1f5f9;
+}
+
+.dark-theme .task-row:hover,
+[data-theme='dark'] .task-row:hover {
+  background: #131c31;
+  border-color: #334155;
+}
+
+.dark-theme .task-row-icon,
+[data-theme='dark'] .task-row-icon {
+  background: #1e293b;
+  border-color: #334155;
+  color: #818cf8;
+}
+
+.dark-theme .task-row strong,
+[data-theme='dark'] .task-row strong {
+  color: #f8fafc;
+}
+
+.dark-theme .task-row > div > span,
+[data-theme='dark'] .task-row > div > span {
+  color: #64748b;
+}
+
+.dark-theme .task-row-delete,
+[data-theme='dark'] .task-row-delete {
+  color: #64748b;
+}
+
+.dark-theme .task-row-delete:hover,
+[data-theme='dark'] .task-row-delete:hover {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+}
+
+.dark-theme .status,
+[data-theme='dark'] .status {
+  background: #1e293b;
+  color: #94a3b8;
+}
+
+.dark-theme .status.completed,
+[data-theme='dark'] .status.completed {
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+}
+
+.dark-theme .status.running,
+[data-theme='dark'] .status.running {
+  background: rgba(99, 102, 241, 0.15);
+  color: #818cf8;
+}
+
+.dark-theme .status.failed,
+[data-theme='dark'] .status.failed {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+}
+
+.dark-theme .status.paused,
+[data-theme='dark'] .status.paused {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+}
+
+.dark-theme .large-empty,
+[data-theme='dark'] .large-empty {
+  color: #94a3b8;
+}
+
+.dark-theme .large-empty h2,
+[data-theme='dark'] .large-empty h2 {
+  color: #f8fafc;
+}
+
+.dark-theme .large-empty p,
+[data-theme='dark'] .large-empty p {
+  color: #94a3b8;
+}
+
+.dark-theme .large-empty > svg,
+[data-theme='dark'] .large-empty > svg {
+  color: #818cf8;
+}
+
+.dark-theme .task-detail-card,
+[data-theme='dark'] .task-detail-card {
+  background: #0f172a;
+  border-color: #1e293b;
+  color: #f1f5f9;
+}
+
+.dark-theme .task-detail-card h2,
+[data-theme='dark'] .task-detail-card h2 {
+  color: #f8fafc;
+}
+
+.dark-theme .task-detail-card small,
+[data-theme='dark'] .task-detail-card small {
+  color: #64748b;
+}
+
+.dark-theme .task-detail-card .muted,
+[data-theme='dark'] .task-detail-card .muted {
+  color: #94a3b8;
+}
+
+.dark-theme .task-controls button,
+[data-theme='dark'] .task-controls button {
+  background: #1e293b;
+  border: 1px solid #334155;
+  color: #cbd5e1;
+}
+
+.dark-theme .task-controls button:hover:not(:disabled),
+[data-theme='dark'] .task-controls button:hover:not(:disabled) {
+  background: #243048;
+  color: #f8fafc;
+}
+
+.dark-theme .task-controls .quiet-button,
+[data-theme='dark'] .task-controls .quiet-button {
+  background: transparent;
+  border-color: transparent;
+  color: #64748b;
+}
+
+.dark-theme .task-controls .quiet-button:hover:not(:disabled),
+[data-theme='dark'] .task-controls .quiet-button:hover:not(:disabled) {
+  background: #1e293b;
+  color: #f8fafc;
+}
+
+.dark-theme .danger-button,
+[data-theme='dark'] .danger-button {
+  background: rgba(239, 68, 68, 0.15) !important;
+  color: #f87171 !important;
+  border-color: rgba(239, 68, 68, 0.3) !important;
+}
+
+.dark-theme .danger-button:hover:not(:disabled),
+[data-theme='dark'] .danger-button:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.25) !important;
+  border-color: rgba(239, 68, 68, 0.5) !important;
+  color: #fca5a5 !important;
+}
+
+/* Activity / Memories Dark Theme */
+.dark-theme .memory-card,
+[data-theme='dark'] .memory-card {
+  background: #0f172a;
+  border-color: #1e293b;
+  color: #f1f5f9;
+}
+
+.dark-theme .memory-card strong,
+[data-theme='dark'] .memory-card strong {
+  color: #f8fafc;
+}
+
+.dark-theme .memory-card p,
+[data-theme='dark'] .memory-card p {
+  color: #94a3b8;
+}
+
+.dark-theme .memory-card small,
+[data-theme='dark'] .memory-card small {
+  color: #64748b;
+}
+
 

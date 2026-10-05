@@ -80,6 +80,23 @@ export function SpaceWorkspace({
       setError(e instanceof Error ? e.message : 'Could not create page.');
     }
   };
+  const deletePage = async (id: string) => {
+    const target = pages.find((p) => p.id === id);
+    if (
+      !window.confirm(
+        `Are you sure you want to delete "${target?.title || 'this page'}"?`,
+      )
+    )
+      return;
+    try {
+      await api(`/spaces/${space.id}/pages/${id}`, 'DELETE');
+      setPages((previous) => previous.filter((p) => p.id !== id));
+      if (pageId === id) onPage(undefined);
+      onRefresh();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Could not delete page.');
+    }
+  };
   return (
     <main
       aria-label="Space documents"
@@ -96,6 +113,7 @@ export function SpaceWorkspace({
           pages={pages}
           onPage={onPage}
           onNew={() => void create(null)}
+          onDelete={deletePage}
         />
       ) : page ? (
         <div className="space-writing-layout">
@@ -120,6 +138,7 @@ export function SpaceWorkspace({
             onHome={() => onPage()}
             onOutline={() => setOutline(!outline)}
             onSubpage={() => void create(page.id)}
+            onDelete={() => void deletePage(page.id)}
             onDirty={onDirty}
             onSaved={saved}
             onRefresh={onRefresh}

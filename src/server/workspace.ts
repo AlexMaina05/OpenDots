@@ -248,6 +248,9 @@ export class WorkspaceStore {
     }
     return true;
   }
+  deleteTask(id: string) {
+    this.db.prepare('DELETE FROM task_threads WHERE taskId=?').run(id);
+  }
   conversations(): Conversation[] {
     return this.db
       .prepare(

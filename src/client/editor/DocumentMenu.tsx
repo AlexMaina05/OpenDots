@@ -3,7 +3,7 @@ import { MoreHorizontal } from 'lucide-react';
 export function DocumentMenu({
   items,
 }: {
-  items: { label: string; action: () => void }[];
+  items: { label: string; action: () => void; danger?: boolean }[];
 }) {
   const [open, setOpen] = useState(false);
   const root = useRef<HTMLDivElement>(null);
@@ -79,6 +79,7 @@ export function DocumentMenu({
             <button
               key={item.label}
               role="menuitem"
+              className={item.danger ? 'document-menu-danger' : undefined}
               onClick={() => {
                 setOpen(false);
                 trigger.current?.focus();

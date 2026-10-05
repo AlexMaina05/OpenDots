@@ -3,6 +3,7 @@ import {
   ChevronRight,
   LoaderCircle,
   MessageCircle,
+  Trash2,
 } from 'lucide-react';
 import type { Task } from '../shared/types';
 import { Mascot } from './Mascot';
@@ -32,12 +33,25 @@ export function Status({ task }: { task: Task }) {
 export function TaskRow({
   task,
   onClick,
+  onDelete,
 }: {
   task: Task;
   onClick: () => void;
+  onDelete?: () => void;
 }) {
   return (
-    <button className="task-row" onClick={onClick}>
+    <div
+      role="button"
+      tabIndex={0}
+      className="task-row"
+      onClick={onClick}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onClick();
+        }
+      }}
+    >
       <span className="task-row-icon">
         {task.status === 'completed' ? (
           <CheckCheck size={19} />
@@ -57,8 +71,22 @@ export function TaskRow({
         </span>
       </div>
       <Status task={task} />
+      {onDelete && (
+        <button
+          type="button"
+          className="task-row-delete"
+          title="Delete task"
+          aria-label={`Delete task ${task.prompt}`}
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete();
+          }}
+        >
+          <Trash2 size={15} />
+        </button>
+      )}
       <ChevronRight size={16} />
-    </button>
+    </div>
   );
 }
 export function Empty({ title, text }: { title: string; text: string }) {

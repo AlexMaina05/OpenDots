@@ -36,6 +36,7 @@ export function PageDocument({
   onThread,
   onSettings,
   onCreateDot,
+  onDelete,
 }: {
   page: Page;
   pages: Page[];
@@ -51,6 +52,7 @@ export function PageDocument({
   onThread: (id: string) => void;
   onSettings: () => void;
   onCreateDot: () => void;
+  onDelete?: () => void;
 }) {
   const { controller, state } = usePageAutosave(page, onSaved);
   const draft = state.draft!;
@@ -197,6 +199,15 @@ export function PageDocument({
                     {
                       label: 'Open source conversation',
                       action: () => onThread(page.sourceThreadId!),
+                    },
+                  ]
+                : []),
+              ...(onDelete
+                ? [
+                    {
+                      label: 'Delete page',
+                      action: onDelete,
+                      danger: true,
                     },
                   ]
                 : []),

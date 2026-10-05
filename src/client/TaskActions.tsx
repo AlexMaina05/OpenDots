@@ -1,4 +1,4 @@
-import { Clock3, Pause, Play, Square } from 'lucide-react';
+import { Clock3, Pause, Play, Square, Trash2 } from 'lucide-react';
 import type { Action, Settings, Task } from '../shared/types';
 export function TaskActions({
   task,
@@ -6,12 +6,14 @@ export function TaskActions({
   settings,
   onAction,
   onSchedule,
+  onDelete,
 }: {
   task: Task;
   busy: boolean;
   settings: Settings;
   onAction: (action: Action) => void;
   onSchedule: () => void;
+  onDelete?: () => void;
 }) {
   const active = task.status === 'running' || task.status === 'queued';
   return (
@@ -52,6 +54,16 @@ export function TaskActions({
         >
           <Square size={12} />
           Cancel
+        </button>
+      )}
+      {onDelete && (
+        <button
+          disabled={busy}
+          className="danger-button"
+          onClick={onDelete}
+        >
+          <Trash2 size={13} />
+          Delete task
         </button>
       )}
     </div>

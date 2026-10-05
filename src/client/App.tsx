@@ -254,6 +254,26 @@ export function App() {
       );
     }
   };
+  const deleteTask = async (id: string) => {
+    const target = state?.tasks.find((t) => t.id === id);
+    const label = target ? `"${target.prompt}"` : 'this task';
+    if (
+      !window.confirm(
+        `Delete ${label}? Its schedule and run history will be permanently removed.`,
+      )
+    )
+      return;
+    setError('');
+    try {
+      await api(`/tasks/${id}`, 'DELETE');
+      if (taskDetail?.task.id === id) {
+        setTaskDetail(undefined);
+      }
+      await refresh();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Could not delete task.');
+    }
+  };
   if (needsAuth)
     return (
       <main className="unlock">
@@ -878,6 +898,7 @@ export function App() {
                             .then(setTaskDetail)
                             .catch((e) => setError(e.message))
                         }
+                        onDelete={() => void deleteTask(task.id)}
                       />
                     ))}
                 </div>
@@ -898,6 +919,7 @@ export function App() {
                       task={taskDetail.task}
                       busy={busy}
                       settings={state.settings}
+                      onDelete={() => void deleteTask(taskDetail.task.id)}
                       onAction={(action) =>
                         void mutate(
                           `/tasks/${taskDetail.task.id}/actions`,

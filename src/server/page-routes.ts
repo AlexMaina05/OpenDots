@@ -92,6 +92,13 @@ export function pageRoutes(platform: Platform) {
       ),
     );
   });
+  app.delete('/spaces/:spaceId/pages/:id', (c) => {
+    platform.workspace.pages.delete(
+      c.req.param('spaceId'),
+      c.req.param('id'),
+    );
+    return c.json({ ok: true });
+  });
   app.post('/spaces/:spaceId/pages/:id/conversation', async (c) => {
     const data = z
       .object({ dotId: z.string().min(1) })

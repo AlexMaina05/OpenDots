@@ -182,6 +182,14 @@ export function createApp({
     const task = store.schedule(c.req.param('id'), parsed.data.intervalSeconds);
     return task ? c.json(task) : c.json({ error: 'Task not found.' }, 404);
   });
+  app.delete('/api/tasks/:id', (c) => {
+    const id = c.req.param('id');
+    runner.abort(id);
+    workspace.deleteTask(id);
+    const deleted = store.deleteTask(id);
+    if (!deleted) return c.json({ error: 'Task not found.' }, 404);
+    return c.json({ ok: true });
+  });
   app.patch('/api/settings', async (c) => {
     const parsed = z
       .object({

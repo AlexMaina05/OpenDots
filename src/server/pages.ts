@@ -198,6 +198,26 @@ export class Pages {
       throw error;
     }
   }
+  delete(spaceId: string, id: string): boolean {
+    this.requireSpace(spaceId);
+    this.db.exec('BEGIN IMMEDIATE');
+    try {
+      const page = this.get(spaceId, id);
+      this.db
+        .prepare('UPDATE pages SET parentId=? WHERE parentId=? AND spaceId=?')
+        .run(page.parentId, id, spaceId);
+      this.db.prepare('DELETE FROM page_reviews WHERE pageId=?').run(id);
+      this.db.prepare('DELETE FROM page_threads WHERE pageId=?').run(id);
+      const changes = this.db
+        .prepare('DELETE FROM pages WHERE id=? AND spaceId=?')
+        .run(id, spaceId).changes;
+      this.db.exec('COMMIT');
+      return changes > 0;
+    } catch (error) {
+      this.db.exec('ROLLBACK');
+      throw error;
+    }
+  }
   thread(pageId: string, dotId: string) {
     const row = this.db
       .prepare(

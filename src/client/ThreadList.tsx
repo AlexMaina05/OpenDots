@@ -60,7 +60,9 @@ export function ThreadList({
             <MessageCircle size={15} />
             <span className="thread-summary">
               <span>{remote?.name || thread.title}</span>
-              <small>{dots.find((dot) => dot.id === thread.dotId)?.name}</small>
+              <span className="thread-dot-name">
+                {dots.find((dot) => dot.id === thread.dotId)?.name}
+              </span>
             </span>
             {onDelete && (
               <button

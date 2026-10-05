@@ -168,6 +168,14 @@ export class Store {
       return this.task(id);
     });
   }
+  deleteTask(id: string): boolean {
+    return this.transaction(() => {
+      this.db.prepare('DELETE FROM events WHERE taskId=?').run(id);
+      this.db.prepare('DELETE FROM runs WHERE taskId=?').run(id);
+      const changes = this.db.prepare('DELETE FROM tasks WHERE id=?').run(id).changes;
+      return changes > 0;
+    });
+  }
   schedule(id: string, intervalSeconds: number | null): Task | undefined {
     const task = this.task(id);
     if (!task) return undefined;
