@@ -55,20 +55,29 @@ export function createApp({
         }
       })
       .filter((h): h is string => Boolean(h));
+    const hostHeader = c.req.header('x-forwarded-host') || c.req.header('host');
     const allowedHosts = new Set([
       'localhost',
       '127.0.0.1',
       '[::1]',
       ...originHostnames,
+      ...(hostHeader ? [hostHeader.split(':')[0]] : []),
     ]);
     if (!ownerToken && !allowedHosts.has(requestUrl.hostname))
       return c.json({ error: 'Unrecognized host.' }, 403);
     const requestOrigin = c.req.header('origin');
-    const allowedOrigins = new Set(
-      configuredOrigins.length > 0
+    const protoHeader =
+      c.req.header('x-forwarded-proto') ||
+      (requestUrl.protocol ? requestUrl.protocol.replace(':', '') : 'http');
+    const dynamicOrigin = hostHeader
+      ? `${protoHeader}://${hostHeader}`
+      : undefined;
+    const allowedOrigins = new Set([
+      ...(configuredOrigins.length > 0
         ? configuredOrigins
-        : [new URL(c.req.url).origin],
-    );
+        : [new URL(c.req.url).origin]),
+      ...(dynamicOrigin ? [dynamicOrigin] : []),
+    ]);
     if (requestOrigin && !allowedOrigins.has(requestOrigin))
       return c.json({ error: 'Cross-origin requests are not allowed.' }, 403);
     if (c.req.header('sec-fetch-site') === 'cross-site')

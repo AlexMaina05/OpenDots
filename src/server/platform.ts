@@ -189,7 +189,12 @@ export class Platform {
         { status: 403 },
       );
     }
-    return this.handler.fetch(request);
+    const response = await this.handler.fetch(request);
+    const url = new URL(request.url);
+    if (url.pathname.endsWith('/inspector-metadata') && response.status === 404) {
+      return Response.json({ agents: [], tools: [] }, { status: 200 });
+    }
+    return response;
   }
   async turn(
     threadId: string,

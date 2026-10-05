@@ -24,7 +24,13 @@ export function validateRuntimeScope(
   let match: RegExpMatchArray | null;
   // Match the whole path. The SDK accepts suffix matches, so accepting arbitrary
   // prefixes here would validate a different thread than the SDK dispatches.
-  if (path === 'info' || path === 'threads') methods = ['GET'];
+  if (
+    path === 'info' ||
+    path === 'threads' ||
+    path === 'inspector-metadata' ||
+    path === 'inspector-learning'
+  )
+    methods = ['GET'];
   else if (path === 'threads/subscribe') methods = ['POST'];
   else if ((match = path.match(/^agent\/([^/]+)\/(run|connect|suggest)$/))) {
     agentId = id(match[1]);
