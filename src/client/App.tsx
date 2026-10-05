@@ -402,7 +402,7 @@ export function App() {
             <i />
             <i />
           </span>
-          MainaDots<span className="wordmark-dot">•</span>
+          MainaDots
         </button>
         <button
           className="new-chat nav-item"
@@ -503,7 +503,7 @@ export function App() {
           >
             <Clock3 size={17} />
             <span>Scheduled & activity</span>
-            <small>{state.tasks.length}</small>
+            <span className="nav-badge">{state.tasks.length}</span>
           </button>
           <button
             className={`nav-item ${view === 'memories' ? 'active' : ''}`}
@@ -514,7 +514,7 @@ export function App() {
           >
             <BookOpen size={17} />
             <span>Memories</span>
-            <small>{state.memories.length}</small>
+            <span className="nav-badge">{state.memories.length}</span>
           </button>
           <button
             className="nav-item"
