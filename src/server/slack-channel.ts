@@ -40,7 +40,7 @@ export function slackIdentity(
     !config.slackUsers.includes(context.actor.id)
   )
     return null;
-  return { id: ownerId, name: 'OpenDots owner' };
+  return { id: ownerId, name: 'MainaDots owner' };
 }
 type Turn = {
   thread: Pick<Thread, 'runAgent' | 'post' | 'subscribe' | 'isSubscribed'>;
@@ -75,7 +75,7 @@ export function slackHandlers(options: {
     if (options.paused()) {
       await notice(
         thread,
-        'OpenDots is paused. Resume it in the app before asking me to continue.',
+        'MainaDots is paused. Resume it in the app before asking me to continue.',
       );
       return;
     }

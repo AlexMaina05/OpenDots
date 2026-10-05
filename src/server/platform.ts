@@ -64,7 +64,7 @@ export class Platform {
       intelligence: this.intelligence,
       identifyUser: async () => ({
         id: workspace.ownerId,
-        name: 'OpenDots owner',
+        name: 'MainaDots owner',
       }),
       agents: async () =>
         Object.fromEntries(

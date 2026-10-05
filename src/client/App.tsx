@@ -8,8 +8,8 @@ import {
   ArrowUpRight,
   BookOpen,
   Clock3,
-  Code2,
   Folder,
+  Globe,
   Menu,
   MessageCircle,
   Monitor,
@@ -261,7 +261,7 @@ export function App() {
             onChange={(e) => setAuth(e.target.value)}
             required
           />
-          <button className="primary">Unlock OpenDots</button>
+          <button className="primary">Unlock MainaDots</button>
         </form>
         {error && (
           <p className="chat-error" role="alert">
@@ -289,13 +289,13 @@ export function App() {
       <nav className="icon-rail" aria-label="Workspace navigation">
         <button
           className="rail-brand"
-          aria-label="OpenDots home"
+          aria-label="MainaDots home"
           onClick={() => {
             setView('chat');
             setSelectedThread(undefined);
           }}
         >
-          o<span>·</span>
+          m<span>·</span>
         </button>
         <button
           aria-label={navCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
@@ -362,7 +362,7 @@ export function App() {
             <i />
             <i />
           </span>
-          OpenDots<span className="wordmark-dot">•</span>
+          MainaDots<span className="wordmark-dot">•</span>
         </button>
         <button
           className="new-chat nav-item"
@@ -484,17 +484,17 @@ export function App() {
             <span>Settings & setup</span>
           </button>
           <a
-            className="nav-item"
-            href="https://github.com/CopilotKit/OpenDots"
+            className="nav-item external-link"
+            href="https://alexmaina.dev"
             target="_blank"
             rel="noreferrer"
           >
-            <Code2 size={17} />
-            <span>Make it your own</span>
+            <Globe size={17} />
+            <span>alexmaina.dev</span>
             <ArrowUpRight size={13} />
           </a>
           <div className="version">
-            OPEN SOURCE TEMPLATE <span>v0.1</span>
+            MAINADOTS <span>v0.1</span>
           </div>
         </div>
       </aside>

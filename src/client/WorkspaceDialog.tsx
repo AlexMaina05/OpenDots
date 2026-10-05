@@ -116,7 +116,7 @@ export function WorkspaceDialog({
         >
           <X size={18} />
         </button>
-        <span className="eyebrow">OPENDOTS TEMPLATE</span>
+        <span className="eyebrow">MAINADOTS</span>
         <h2 id="dialog-title">{title}</h2>
         <form
           onSubmit={async (e) => {
