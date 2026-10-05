@@ -13,6 +13,7 @@ import {
   Menu,
   MessageCircle,
   Monitor,
+  Moon,
   MoreHorizontal,
   Pause,
   PanelLeft,
@@ -20,6 +21,7 @@ import {
   Plus,
   Search,
   Settings2,
+  Sun,
   Trash2,
   X,
 } from 'lucide-react';
@@ -95,6 +97,30 @@ export function App() {
   const [error, setError] = useState('');
   const [auth, setAuth] = useState('');
   const [needsAuth, setNeedsAuth] = useState(false);
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    const saved = localStorage.getItem('mainadots-theme');
+    if (saved === 'dark' || saved === 'light') return saved;
+    return window.matchMedia?.('(prefers-color-scheme: dark)').matches
+      ? 'dark'
+      : 'light';
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+      document.body.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      document.body.classList.remove('dark');
+    }
+    localStorage.setItem('mainadots-theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  };
+
   const [dialog, setDialog] = useState<Dialog>();
   const [mobile, setMobile] = useState(false);
   const [navCollapsed, setNavCollapsed] = useState(false);
@@ -285,7 +311,9 @@ export function App() {
       </main>
     );
   const content = (
-    <div className={`app template-app ${navCollapsed ? 'nav-collapsed' : ''}`}>
+    <div
+      className={`app template-app ${navCollapsed ? 'nav-collapsed' : ''} ${theme === 'dark' ? 'dark-theme' : ''}`}
+    >
       <nav className="icon-rail" aria-label="Workspace navigation">
         <button
           className="rail-brand"
@@ -320,6 +348,18 @@ export function App() {
         </button>
         <button aria-label="Open activity" onClick={() => setView('tasks')}>
           <Clock3 size={18} />
+        </button>
+        <button
+          className="rail-theme-toggle"
+          aria-label={
+            theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
+          }
+          title={
+            theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
+          }
+          onClick={toggleTheme}
+        >
+          {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
         </button>
         <button
           className="rail-settings"
@@ -528,6 +568,18 @@ export function App() {
             <span className="mode-badge">
               {configured ? 'SELF-HOSTED' : 'SETUP REQUIRED'}
             </span>
+            <button
+              className="icon-button theme-toggle"
+              aria-label={
+                theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
+              }
+              title={
+                theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
+              }
+              onClick={toggleTheme}
+            >
+              {theme === 'dark' ? <Sun size={17} /> : <Moon size={17} />}
+            </button>
             <button
               className="pause-button"
               aria-label={
