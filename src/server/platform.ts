@@ -131,6 +131,22 @@ export class Platform {
     }
     return this.workspace.bindThread(id, dotId, title);
   }
+  async deleteConversation(id: string) {
+    if (
+      this.intelligence &&
+      typeof (this.intelligence as unknown as { deleteThread?: (opts: unknown) => Promise<unknown> }).deleteThread === 'function'
+    ) {
+      try {
+        await (this.intelligence as unknown as { deleteThread: (opts: unknown) => Promise<unknown> }).deleteThread({
+          threadId: id,
+          userId: this.workspace.ownerId,
+        });
+      } catch {
+        // Cloud thread deletion should not prevent local deletion
+      }
+    }
+    return this.workspace.deleteConversation(id);
+  }
   async history(threadId: string): Promise<string> {
     this.requireReady();
     this.workspace.requireThread(threadId);

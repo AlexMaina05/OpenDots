@@ -673,6 +673,16 @@ h3 {
 .primary:hover:not(:disabled) {
   background: #6177c5;
 }
+.danger-button {
+  background: #fff5f5;
+  color: #e5484d;
+  border: 1px solid #fecaca;
+  font-size: 12px;
+}
+.danger-button:hover:not(:disabled) {
+  background: #fee2e2;
+  border-color: #fca5a5;
+}
 .full {
   width: 100%;
   margin-top: 15px;
@@ -1974,11 +1984,35 @@ h3 {
 .thread-list .nav-item {
   padding: 9px 12px;
   font-size: 10px;
+  cursor: pointer;
+  position: relative;
 }
 .thread-list .nav-item > span {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.thread-delete {
+  opacity: 0;
+  transition: opacity 0.15s ease, color 0.15s ease, background 0.15s ease;
+  padding: 3px;
+  border-radius: 4px;
+  color: #acaeba;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-left: 4px;
+}
+.thread-list .nav-item:hover .thread-delete {
+  opacity: 1;
+}
+.thread-delete:hover {
+  color: #e5484d !important;
+  background: rgba(229, 72, 77, 0.15) !important;
 }
 .sidebar-empty,
 .sidebar-error {

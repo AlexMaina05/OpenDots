@@ -396,6 +396,36 @@ export function WorkspaceDialog({
           <button className="primary full" disabled={busy}>
             {busy ? 'Saving…' : 'Save'}
           </button>
+          {dialog.type === 'dot' && dialog.dot && workspace.dots.length > 1 && (
+            <button
+              type="button"
+              className="danger-button full"
+              style={{ marginTop: 8 }}
+              disabled={busy}
+              onClick={async () => {
+                if (
+                  !window.confirm(
+                    `Delete "${dialog.dot!.name}"? All its conversations will also be permanently deleted.`,
+                  )
+                )
+                  return;
+                setBusy(true);
+                setError('');
+                try {
+                  const ok = await mutate(`/dots/${dialog.dot!.id}`, 'DELETE');
+                  if (ok) onClose();
+                } catch (e) {
+                  setError(
+                    e instanceof Error ? e.message : 'Could not delete Dot.',
+                  );
+                } finally {
+                  setBusy(false);
+                }
+              }}
+            >
+              Delete Dot
+            </button>
+          )}
         </form>
       </section>
     </div>

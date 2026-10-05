@@ -117,6 +117,14 @@ export function workspaceRoutes(platform: Platform, voice: VoiceService) {
     }
     return c.json(platform.workspace.updateDot(c.req.param('id'), data.data));
   });
+  app.delete('/dots/:id', (c) => {
+    const dot = platform.workspace.dot(c.req.param('id'));
+    if (!dot) return c.json({ error: 'Dot not found.' }, 404);
+    if (platform.workspace.dots().length <= 1)
+      return c.json({ error: 'At least one Dot must remain.' }, 400);
+    platform.workspace.deleteDot(c.req.param('id'));
+    return c.json({ success: true });
+  });
   app.post('/conversations', async (c) => {
     const data = z
       .object({
@@ -136,6 +144,14 @@ export function workspaceRoutes(platform: Platform, voice: VoiceService) {
       await platform.createConversation(data.data.dotId, data.data.title),
       201,
     );
+  });
+  app.delete('/conversations/:id', async (c) => {
+    const thread = platform.workspace
+      .conversations()
+      .find((t) => t.id === c.req.param('id'));
+    if (!thread) return c.json({ error: 'Conversation not found.' }, 404);
+    await platform.deleteConversation(c.req.param('id'));
+    return c.json({ success: true });
   });
   app.get('/conversations/:id/capture', (c) =>
     c.json(platform.workspace.capture(c.req.param('id'))),

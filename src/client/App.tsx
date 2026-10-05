@@ -199,6 +199,35 @@ export function App() {
       setBusy(false);
     }
   };
+  const deleteConversation = async (id: string) => {
+    if (
+      !window.confirm(
+        'Delete this conversation? Its history will be permanently removed.',
+      )
+    )
+      return;
+    setError('');
+    try {
+      await api(`/conversations/${id}`, 'DELETE');
+      await refresh();
+      if (selectedThread === id) {
+        const remaining = workspace?.conversations.filter((c) => c.id !== id);
+        const next =
+          remaining?.find((c) => c.dotId === dot?.id) ?? remaining?.[0];
+        if (next) {
+          setSelectedDot(next.dotId);
+          setSelectedThread(next.id);
+        } else {
+          setSelectedThread(undefined);
+          setView('space');
+        }
+      }
+    } catch (e) {
+      setError(
+        e instanceof Error ? e.message : 'Could not delete conversation.',
+      );
+    }
+  };
   if (needsAuth)
     return (
       <main className="unlock">
@@ -417,6 +446,7 @@ export function App() {
               setMobile(false);
             }}
             onNew={() => void newConversation()}
+            onDelete={(id) => void deleteConversation(id)}
           />
         ) : (
           <div className="sidebar-empty">

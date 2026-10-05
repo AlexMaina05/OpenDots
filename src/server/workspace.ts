@@ -228,6 +228,26 @@ export class WorkspaceStore {
     }
     return this.dot(id)!;
   }
+  deleteDot(id: string): boolean {
+    const dots = this.dots();
+    if (dots.length <= 1) throw new Error('At least one Dot must remain.');
+    const dot = dots.find((d) => d.id === id);
+    if (!dot) return false;
+    const threads = this.conversations().filter((t) => t.dotId === id);
+    for (const thread of threads) {
+      this.deleteConversation(thread.id);
+    }
+    this.db.exec('BEGIN IMMEDIATE');
+    try {
+      this.db.prepare('DELETE FROM dot_spaces WHERE dotId=?').run(id);
+      this.db.prepare('DELETE FROM dots WHERE id=?').run(id);
+      this.db.exec('COMMIT');
+    } catch (error) {
+      this.db.exec('ROLLBACK');
+      throw error;
+    }
+    return true;
+  }
   conversations(): Conversation[] {
     return this.db
       .prepare(
@@ -265,6 +285,24 @@ export class WorkspaceStore {
     if (!thread || (dotId && thread.dotId !== dotId))
       throw new Error('Conversation does not belong to this Dot and owner.');
     return thread;
+  }
+  deleteConversation(id: string): boolean {
+    const thread = this.conversations().find((t) => t.id === id);
+    if (!thread) return false;
+    this.db.exec('BEGIN IMMEDIATE');
+    try {
+      this.db.prepare('DELETE FROM thread_bindings WHERE id=?').run(id);
+      this.db.prepare('DELETE FROM task_threads WHERE threadId=?').run(id);
+      this.db.prepare('DELETE FROM calls WHERE threadId=?').run(id);
+      this.db.prepare('DELETE FROM captures WHERE threadId=?').run(id);
+      this.db.prepare('DELETE FROM page_threads WHERE threadId=?').run(id);
+      this.db.prepare('DELETE FROM page_reviews WHERE threadId=?').run(id);
+      this.db.exec('COMMIT');
+    } catch (error) {
+      this.db.exec('ROLLBACK');
+      throw error;
+    }
+    return true;
   }
   bindTask(taskId: string, threadId: string) {
     this.requireThread(threadId);
